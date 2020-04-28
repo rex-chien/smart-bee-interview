@@ -10,9 +10,7 @@ import rex.chien.cms.repository.CompanyRepository;
 import rex.chien.cms.security.JwtUser;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("companies")
@@ -29,7 +27,7 @@ public class CompanyController {
     }
 
     @RequestMapping(value = "{companyId}", method = RequestMethod.POST)
-    public ResponseEntity<?> get(@PathVariable long companyId) {
+    public ResponseEntity<Company> get(@PathVariable long companyId) {
         Optional<Company> targetCompany = companyRepository.findById(companyId);
 
         return ResponseEntity.of(targetCompany);
@@ -76,8 +74,16 @@ public class CompanyController {
     @RequestMapping(value = "{companyId}", method = RequestMethod.DELETE)
     @PreAuthorize("hasAnyRole('SUPER_USER', 'MANAGER')")
     public ResponseEntity<?> delete(@PathVariable long companyId) {
-        companyRepository.deleteById(companyId);
+        Optional<Company> targetCompany = companyRepository.findById(companyId);
 
-        return ResponseEntity.ok().build();
+        if (targetCompany.isPresent()) {
+            Company company = targetCompany.get();
+
+            companyRepository.delete(company);
+
+            return ResponseEntity.ok(company);
+        }
+
+        return ResponseEntity.notFound().build();
     }
 }
