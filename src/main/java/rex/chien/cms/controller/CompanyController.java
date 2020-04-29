@@ -8,7 +8,9 @@ import rex.chien.cms.domain.Company;
 import rex.chien.cms.domain.CompanyRequest;
 import rex.chien.cms.repository.CompanyRepository;
 import rex.chien.cms.security.JwtUser;
+import rex.chien.cms.security.RoleName;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.Date;
 import java.util.Optional;
 
@@ -22,11 +24,13 @@ public class CompanyController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
+    @RolesAllowed({RoleName.SUPER_USER, RoleName.MANAGER, RoleName.OPERATOR})
     public Iterable<Company> getAll() {
         return companyRepository.findAll();
     }
 
     @RequestMapping(value = "{companyId}", method = RequestMethod.POST)
+    @RolesAllowed({RoleName.SUPER_USER, RoleName.MANAGER, RoleName.OPERATOR})
     public ResponseEntity<Company> get(@PathVariable long companyId) {
         Optional<Company> targetCompany = companyRepository.findById(companyId);
 
@@ -34,7 +38,7 @@ public class CompanyController {
     }
 
     @RequestMapping(method = RequestMethod.PUT)
-    @PreAuthorize("hasAnyRole('SUPER_USER', 'OPERATOR')")
+    @RolesAllowed({RoleName.SUPER_USER, RoleName.OPERATOR})
     public Company create(@RequestBody CompanyRequest companyRequest, Authentication authentication) {
         JwtUser jwtUser = (JwtUser) authentication.getPrincipal();
 
@@ -50,7 +54,7 @@ public class CompanyController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    @PreAuthorize("hasAnyRole('SUPER_USER', 'MANAGER')")
+    @RolesAllowed({RoleName.SUPER_USER, RoleName.MANAGER})
     public ResponseEntity<?> update(@RequestBody CompanyRequest companyRequest, Authentication authentication) {
         JwtUser jwtUser = (JwtUser) authentication.getPrincipal();
 
@@ -72,7 +76,7 @@ public class CompanyController {
     }
 
     @RequestMapping(value = "{companyId}", method = RequestMethod.DELETE)
-    @PreAuthorize("hasAnyRole('SUPER_USER', 'MANAGER')")
+    @RolesAllowed({RoleName.SUPER_USER, RoleName.MANAGER})
     public ResponseEntity<?> delete(@PathVariable long companyId) {
         Optional<Company> targetCompany = companyRepository.findById(companyId);
 

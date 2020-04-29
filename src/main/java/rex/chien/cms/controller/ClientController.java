@@ -8,7 +8,9 @@ import rex.chien.cms.domain.Client;
 import rex.chien.cms.domain.ClientRequest;
 import rex.chien.cms.repository.ClientRepository;
 import rex.chien.cms.security.JwtUser;
+import rex.chien.cms.security.RoleName;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -24,11 +26,13 @@ public class ClientController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
+    @RolesAllowed({RoleName.SUPER_USER, RoleName.MANAGER, RoleName.OPERATOR})
     public Iterable<Client> getAll() {
         return clientRepository.findAll();
     }
 
     @RequestMapping(value = "{clientId}", method = RequestMethod.POST)
+    @RolesAllowed({RoleName.SUPER_USER, RoleName.MANAGER, RoleName.OPERATOR})
     public ResponseEntity<?> get(@PathVariable long clientId) {
         Optional<Client> targetClient = clientRepository.findById(clientId);
 
@@ -36,7 +40,7 @@ public class ClientController {
     }
 
     @RequestMapping(value = "bulk", method = RequestMethod.PUT)
-    @PreAuthorize("hasAnyRole('SUPER_USER', 'OPERATOR')")
+    @RolesAllowed({RoleName.SUPER_USER, RoleName.OPERATOR})
     public Client create(@RequestBody ClientRequest clientRequest, Authentication authentication) {
         JwtUser jwtUser = (JwtUser) authentication.getPrincipal();
 
@@ -53,7 +57,7 @@ public class ClientController {
     }
 
     @RequestMapping(method = RequestMethod.PUT)
-    @PreAuthorize("hasAnyRole('SUPER_USER', 'OPERATOR')")
+    @RolesAllowed({RoleName.SUPER_USER, RoleName.OPERATOR})
     public List<Client> bulkCreate(@RequestBody List<ClientRequest> clientRequests, Authentication authentication) {
         JwtUser jwtUser = (JwtUser) authentication.getPrincipal();
 
@@ -74,7 +78,7 @@ public class ClientController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    @PreAuthorize("hasAnyRole('SUPER_USER', 'MANAGER')")
+    @RolesAllowed({RoleName.SUPER_USER, RoleName.MANAGER})
     public ResponseEntity<?> update(@RequestBody ClientRequest clientRequest, Authentication authentication) {
         JwtUser jwtUser = (JwtUser) authentication.getPrincipal();
 
@@ -97,7 +101,7 @@ public class ClientController {
     }
 
     @RequestMapping(value = "{clientId}", method = RequestMethod.DELETE)
-    @PreAuthorize("hasAnyRole('SUPER_USER', 'MANAGER')")
+    @RolesAllowed({RoleName.SUPER_USER, RoleName.MANAGER})
     public ResponseEntity<?> delete(@PathVariable long clientId) {
         clientRepository.deleteById(clientId);
 
