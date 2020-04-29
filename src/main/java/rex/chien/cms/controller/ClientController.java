@@ -31,7 +31,7 @@ public class ClientController {
         return clientRepository.findAll();
     }
 
-    @RequestMapping(value = "{clientId}", method = RequestMethod.POST)
+    @RequestMapping(value = "{clientId}", method = RequestMethod.GET)
     @RolesAllowed({RoleName.SUPER_USER, RoleName.MANAGER, RoleName.OPERATOR})
     public ResponseEntity<?> get(@PathVariable long clientId) {
         Optional<Client> targetClient = clientRepository.findById(clientId);

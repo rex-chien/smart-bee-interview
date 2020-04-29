@@ -29,7 +29,7 @@ public class CompanyController {
         return companyRepository.findAll();
     }
 
-    @RequestMapping(value = "{companyId}", method = RequestMethod.POST)
+    @RequestMapping(value = "{companyId}", method = RequestMethod.GET)
     @RolesAllowed({RoleName.SUPER_USER, RoleName.MANAGER, RoleName.OPERATOR})
     public ResponseEntity<Company> get(@PathVariable long companyId) {
         Optional<Company> targetCompany = companyRepository.findById(companyId);
