@@ -1,13 +1,11 @@
 package rex.chien.cms.security;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -15,13 +13,11 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import rex.chien.cms.domain.Client;
 import rex.chien.cms.domain.Company;
-import rex.chien.cms.domain.CompanyRequest;
 import rex.chien.cms.repository.ClientRepository;
 import rex.chien.cms.repository.CompanyRepository;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -30,7 +26,7 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class SuperUserRoleTests {
+class ManagerRoleTests {
     @Autowired
     private WebApplicationContext context;
 
@@ -76,7 +72,7 @@ class SuperUserRoleTests {
     }
 
     @Nested
-    @WithMockSuperUser
+    @WithMockManager
     class CompanyController {
         @Test
         public void getAll_then_status200() throws Exception {
@@ -115,6 +111,6 @@ class SuperUserRoleTests {
 }
 
 @Retention(RetentionPolicy.RUNTIME)
-@WithMockUser(roles = {RoleName.SUPER_USER})
-@interface WithMockSuperUser {
+@WithMockUser(roles = {RoleName.MANAGER})
+@interface WithMockManager {
 }
