@@ -41,9 +41,9 @@ public class InitialDataLoader implements ApplicationRunner {
     public void run(ApplicationArguments args) {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-        Role roleSuperUser = new Role("ROLE_SUPER_USER");
-        Role roleManager = new Role("ROLE_MANAGER");
-        Role roleOperator = new Role("ROLE_OPERATOR");
+        Role roleSuperUser = new Role("SUPER_USER");
+        Role roleManager = new Role("MANAGER");
+        Role roleOperator = new Role("OPERATOR");
 
         roleRepository.save(roleSuperUser);
         roleRepository.save(roleManager);

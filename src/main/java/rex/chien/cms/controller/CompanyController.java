@@ -6,6 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import rex.chien.cms.domain.Company;
 import rex.chien.cms.domain.CompanyRequest;
+import rex.chien.cms.domain.Role;
 import rex.chien.cms.repository.CompanyRepository;
 import rex.chien.cms.security.JwtUser;
 import rex.chien.cms.security.RoleName;
